@@ -73,3 +73,54 @@ const fetchHtmlFromUrl = async url => {
       error.status = (error.response && error.response.status) || 500;
     });
 };
+
+// Fetches the inner text of the element
+
+const fetchElemInnerText = elem =>
+  (elem.text && elem.text().trim()) || null;
+
+//specified attribute
+const fetchElemAttribute = attribute => elem =>
+  (elem.attr && elem.attr(attribute)) || null;
+
+//fetches specified attributes
+
+const extractFromElems = extractor => transform => elems => $ => {
+  const results = elems
+    .map((i, element) => extractor($(element)))
+    .get();
+  return _.isFunction(transform) ? transform(results) : results;
+};
+
+//extracts and sanitizes number text from element
+
+const extractNumber = compose(
+  parseInt,
+  sanitizeNumber,
+  fetchElemInnerText
+);
+
+// extracts url string from the element's attribute(attr) returns url with https
+
+const extractUrlAttribute = attr =>
+  compose(
+    enforceHttpsUrl,
+    fetchElemAttribute(attr)
+  );
+
+module.exports = {
+  compose,
+  composeAsync,
+  enforceHttpsUrl,
+  sanitizeNumber,
+  withoutNulls,
+  arrayPairsToObject,
+  fromPairsToObject,
+  sendResponse,
+  fetchHtmlFromUrl,
+  fetchElemInnerText,
+  fetchElemAttribute,
+  extractFromElems,
+  extractNumber,
+  extractUrlAttribute
+};
