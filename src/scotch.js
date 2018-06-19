@@ -26,3 +26,5 @@ const extractScotchUrlAttribute = attrs =>
     scotchRelativeUrl,
     fetchElemAttribute(attr)
   );
+
+//NEXT: create extraction function per user
